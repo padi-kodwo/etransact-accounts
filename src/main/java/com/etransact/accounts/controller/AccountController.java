@@ -69,6 +69,23 @@ public class AccountController {
         return apiResponse;
     }
 
+    @PostMapping
+    public ApiResponse<AccountDto> create(@RequestBody @Valid CreateAccountDto createAccountDto,
+                                           HttpServletRequest httpServletRequest) {
+
+        String sessionId = httpServletRequest.getSession().getId();
+
+        logger.info("["+ sessionId +"] http request: create");
+
+        Account domainAccount = accountService.create(createAccountDto);
+        AccountDto domainAccountDto = modelMapper.map(domainAccount, AccountDto.class);
+        ApiResponse<AccountDto> apiResponse= Utils.wrapInApiResponse(domainAccountDto, sessionId);
+
+        logger.info("["+ sessionId +"] http response: create: {}", apiResponse);
+
+        return apiResponse;
+    }
+
     @PutMapping("/deposit")
     public ApiResponse<AccountDto> deposit(@RequestBody @Valid DepositDto depositDto,
                                                  HttpServletRequest httpServletRequest) {
