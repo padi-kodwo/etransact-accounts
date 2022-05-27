@@ -1,6 +1,7 @@
 package com.etransact.accounts.controller;
 
 
+import com.etransact.accounts.dto.CreateUserDto;
 import com.etransact.accounts.dto.UserDto;
 import com.etransact.accounts.dto.response.ApiResponse;
 import com.etransact.accounts.dto.response.PagedContent;
@@ -15,9 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,4 +108,25 @@ public class UsersController {
 
         return apiResponse;
     }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponse<UserDto> signUpUser(@RequestBody @Valid CreateUserDto createUserDto,
+                                           HttpServletRequest httpServletRequest) {
+
+        String sessionId = httpServletRequest.getSession().getId();
+
+        logger.info("["+ sessionId +"] http request: signUpUser");
+
+        User user = userService.create(createUserDto);
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+
+        ApiResponse<UserDto> apiResponse= Utils.wrapInApiResponse(userDto, sessionId);
+
+        logger.info("["+ sessionId +"] http response: signUpUser: {}", apiResponse);
+
+        return apiResponse;
+    }
+
+
 }

@@ -16,7 +16,6 @@ public class Utils {
 
     private static final Logger log = LoggerFactory.getLogger(Utils.class);
 
-
     public static String formatAmount(Double amount) {
         return String.format("%,.2f", amount);
     }
