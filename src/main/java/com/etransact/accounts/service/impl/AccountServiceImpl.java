@@ -64,7 +64,7 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = modelMapper.map(createAccountDto, Account.class);
 
-        if(!validateAccountBalance(account))
+        if(validateAccountBalance(account))
             throw new  ServiceException(-1,
                     "Account must have at least amount 10 for current and 50 for savings" );
 
@@ -85,7 +85,6 @@ public class AccountServiceImpl implements AccountService {
         account.setBalance(account.getBalance().add(depositDto.getAmount()));
 
         //transaction call will go here
-
         return accountRepository.save(account);
     }
 
@@ -96,7 +95,7 @@ public class AccountServiceImpl implements AccountService {
 
         originAccount.setBalance(originAccount.getBalance().subtract(transferDto.getAmount()));
 
-        if (!validateAccountBalance(originAccount))
+        if (validateAccountBalance(originAccount))
             throw new  ServiceException(-1,
                     "Transfer failed, insufficient balance" );
 
@@ -122,7 +121,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = getByNumber(withdrawalDto.getAccountNumber());
         account.setBalance(account.getBalance().subtract(withdrawalDto.getAmount()));
 
-        if (!validateAccountBalance(account))
+        if (validateAccountBalance(account))
             throw new  ServiceException(-1,
                     "Transfer failed, insufficient balance" );
 
@@ -158,13 +157,13 @@ public class AccountServiceImpl implements AccountService {
         // for saving
 
         if (account.getType().equals("CURRENT") && account.getBalance().compareTo(BigDecimal.valueOf(10)) >=0 )
-            return true;
+            return false;
 
 
         if (account.getType().equals("SAVINGS") && account.getBalance().compareTo(BigDecimal.valueOf(50)) >=0 )
-            return true;
+            return false;
 
 
-        return false;
+        return true;
     }
 }
