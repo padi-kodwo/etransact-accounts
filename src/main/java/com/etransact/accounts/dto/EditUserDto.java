@@ -17,7 +17,6 @@ public class EditUserDto implements Serializable {
     private String firstName;
     private String lastName;
     private String otherNames;
-    private boolean loggedIn;
     private String created;
     private String updated;
 }

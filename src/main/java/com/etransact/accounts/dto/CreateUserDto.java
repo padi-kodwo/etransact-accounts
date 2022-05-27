@@ -22,6 +22,10 @@ public class CreateUserDto implements Serializable {
     private String email;
 
     @NotNull
+    @Email
+    private String username;
+
+    @NotNull
     @NotEmpty
     private String phone;
 
